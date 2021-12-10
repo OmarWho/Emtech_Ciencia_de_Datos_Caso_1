@@ -17,14 +17,14 @@ def sublista(lista, n):
         sublista.append(lista[i][n])
     return sublista
 
-
+# función que verifica inconsistencias
 def verifica_inconsistencias():
     mensaje_de_error = '''
         Existen  inconsistencias en los datos proporcionados.
         Datos enviados para revisión.
         '''
 
-    # verifica si existen identificadores o nombres de productos repetidos.
+    # verifica si existen identificadores o nombres de productos repetidos
     if len(set(sublista(lifestore_products, 0))) != len(lifestore_products) or \
             len(set(sublista(lifestore_products, 1))) != len(lifestore_products):
         sys.exit(mensaje_de_error)
@@ -53,14 +53,14 @@ def verifica_inconsistencias():
 
     productos_id = sublista(lifestore_products, 0)
 
-    # verifica si las id_product de las ventas corresponden a un producto existente.
+    # verifica si las id_product de las ventas corresponden a un producto existente
     for sale in lifestore_sales:
         if sale[1] in productos_id:
             continue
         else:
             sys.exit(mensaje_de_error)
 
-    # verifica si las id_product de las búsquedas corresponden a un producto existente.
+    # verifica si las id_product de las búsquedas corresponden a un producto existente
     for search in lifestore_searches:
         if search[1] in productos_id:
             continue
@@ -68,14 +68,59 @@ def verifica_inconsistencias():
             sys.exit(mensaje_de_error)
 
 
+# función que verifica el orden de los identificadores.
 def identificadores_ordenados(lista):
     identificadores = sublista(lista, 0)
     return identificadores == sorted(identificadores), len(identificadores)
 
 
-print(identificadores_ordenados(lifestore_sales))
-print(identificadores_ordenados(lifestore_products))
-print(identificadores_ordenados(lifestore_searches))
+# print(identificadores_ordenados(lifestore_sales))
+# print(identificadores_ordenados(lifestore_products))
+# print(identificadores_ordenados(lifestore_searches))
+
+# separador de secciones del sistema de análisis
+separated = ['⥼', '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯', '⥽']
+separator = separated[0] + separated[1] + separated[2]
+
+''' INGRESO AL SISTEMA
+    Código del inicio del programa.
+'''
+
+# menú de inicio
+
+options = ['Ingreso al sistema de análisis', 'Salir']
+print('INICIO')
+options_list = ''
+index = 1
+for option in options:
+    if index % 2:
+        vignette = '✦'
+    else:
+        vignette = '✧'
+    options_list += f'{vignette}{index}{vignette} ' + option + '\n'
+    index += 1
+while True:
+    print('\tEliga una opción:')
+    print(options_list)
+    a = f'{" " * (len(separated[1]) - 3)}'
+    enter_data = input(a + '・➣ ')
+    try:
+        selection = int(enter_data)
+        if selection < 1 or selection > 2:
+            print("El número no corresponde a ningúna opción indicada.")
+            print("Las opciones son \'1\' y \'2\'.")
+            print("Reintente, por favor.\n")
+        else:
+            break
+    except Exception as error:
+        print("Error: {}".format(error))
+        print("Las opciones son \'1\' y \'2\'.")
+        print("Reintente, por favor.\n")
+
+if selection == 2:
+    exit("Programa terminado.")
+
+print(separator)
 
 
 ''' SISTEMA DE ANÁLISIS
@@ -87,10 +132,6 @@ print(identificadores_ordenados(lifestore_searches))
 num_products = len(lifestore_products)      # obtiene el número de productos
 num_sales = len(lifestore_sales)            # obtiene el número de ventas
 num_searches = len(lifestore_searches)      # obtiene el número de búsquedas
-
-# separador de secciones del sistema de análisis
-separated = ['⥼', '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯', '⥽']
-separator = separated[0] + separated[1] + separated[2]
 
 # mensaje de introducción
 introduction = """\nSISTEMA DE ANÁLISIS:
