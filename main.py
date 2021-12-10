@@ -17,53 +17,56 @@ def sublista(lista, n):
         sublista.append(lista[i][n])
     return sublista
 
-mensaje_de_error = '''
+
+def verifica_inconsistencias():
+    mensaje_de_error = '''
         Existen  inconsistencias en los datos proporcionados.
         Datos enviados para revisión.
         '''
 
-# verifica si existen identificadores o nombres de productos repetidos.
-if len(set(sublista(lifestore_products, 0))) != len(lifestore_products) or \
-        len(set(sublista(lifestore_products, 1))) != len(lifestore_products):
-    sys.exit(mensaje_de_error)
-
-# verifica si existen identificadores de ventas repetidos
-if len(set(sublista(lifestore_sales, 0))) != len(lifestore_sales):
-    sys.exit(mensaje_de_error)
-
-# verifica si existen identificadores de búsquedas repetidos
-if len(set(sublista(lifestore_searches, 0))) != len(lifestore_searches):
-    sys.exit(mensaje_de_error)
-
-# verifica si las reseñas de los productos se encuentran en el rango válido de 1 a 5
-for score in set(sublista(lifestore_sales, 2)):
-    if score in {1, 2, 3, 4, 5}:
-        continue
-    else:
+    # verifica si existen identificadores o nombres de productos repetidos.
+    if len(set(sublista(lifestore_products, 0))) != len(lifestore_products) or \
+            len(set(sublista(lifestore_products, 1))) != len(lifestore_products):
         sys.exit(mensaje_de_error)
 
-# verifica si los valores que toma la variable refund sólo se encuentra en el rango de 0 a 1
-for refund in set(sublista(lifestore_sales, 4)):
-    if refund in {0, 1}:
-        continue
-    else:
+    # verifica si existen identificadores de ventas repetidos
+    if len(set(sublista(lifestore_sales, 0))) != len(lifestore_sales):
         sys.exit(mensaje_de_error)
 
-productos_id = sublista(lifestore_products, 0)
-
-# verifica si las id_product de las ventas corresponden a un producto existente.
-for sale in lifestore_sales:
-    if sale[1] in productos_id:
-        continue
-    else:
+    # verifica si existen identificadores de búsquedas repetidos
+    if len(set(sublista(lifestore_searches, 0))) != len(lifestore_searches):
         sys.exit(mensaje_de_error)
 
-# verifica si las id_product de las búsquedas corresponden a un producto existente.
-for search in lifestore_searches:
-    if search[1] in productos_id:
-        continue
-    else:
-        sys.exit(mensaje_de_error)
+    # verifica si las reseñas de los productos se encuentran en el rango válido de 1 a 5
+    for score in set(sublista(lifestore_sales, 2)):
+        if score in {1, 2, 3, 4, 5}:
+            continue
+        else:
+            sys.exit(mensaje_de_error)
+
+    # verifica si los valores que toma la variable refund sólo se encuentra en el rango de 0 a 1
+    for refund in set(sublista(lifestore_sales, 4)):
+        if refund in {0, 1}:
+            continue
+        else:
+            sys.exit(mensaje_de_error)
+
+    productos_id = sublista(lifestore_products, 0)
+
+    # verifica si las id_product de las ventas corresponden a un producto existente.
+    for sale in lifestore_sales:
+        if sale[1] in productos_id:
+            continue
+        else:
+            sys.exit(mensaje_de_error)
+
+    # verifica si las id_product de las búsquedas corresponden a un producto existente.
+    for search in lifestore_searches:
+        if search[1] in productos_id:
+            continue
+        else:
+            sys.exit(mensaje_de_error)
+
 
 ''' SISTEMA DE ANÁLISIS
     Código del sistema de análisis que fue preparado elaborar el ánalisis de los datos.
@@ -91,7 +94,7 @@ introduction = """\nSISTEMA DE ANÁLISIS:
 print(introduction)
 print(separator)
 
-accounts = [['omar100', 'LOL'], ['emtech', '0123']]             # lista con las cuentas registradas
+accounts = [['omar100', 'LOL'], ['emtech', '1234']]             # lista con las cuentas registradas
 
 # sección de ingreso al sistema
 print("INGRESO AL SISTEMA")
