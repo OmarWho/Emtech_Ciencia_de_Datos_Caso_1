@@ -68,6 +68,16 @@ def verifica_inconsistencias():
             sys.exit(mensaje_de_error)
 
 
+def identificadores_ordenados(lista):
+    identificadores = sublista(lista, 0)
+    return identificadores == sorted(identificadores), len(identificadores)
+
+
+print(identificadores_ordenados(lifestore_sales))
+print(identificadores_ordenados(lifestore_products))
+print(identificadores_ordenados(lifestore_searches))
+
+
 ''' SISTEMA DE ANÁLISIS
     Código del sistema de análisis que fue preparado elaborar el ánalisis de los datos.
 '''
