@@ -1,84 +1,25 @@
 # importa listas desde lifestore_file.py
 from lifestore_file import lifestore_products, lifestore_sales, lifestore_searches
+from data_preprocessing import sublista, verifica_inconsistencias
 import sys
+import time
 # import numpy as np
 
-''' PREPROCESAMIENTO
-    Sección dedicada a verificar si los datos proporcionados no tienen errores 
-    y pertenecen al período (2020) del que se nos ha pedido hacer el análisis. 
-'''
+
+def is_IDs_sorted(list_of_elements):
+    """Function that verifies the IDs of the objects are in increasing order (one at a time)
+    :param list_of_elements: list of elements (products, sales, searches)
+    :return IDs:
+    """
+    IDs = sublista(list_of_elements, 0)
+    return IDs == sorted(IDs), IDs[-1] == len(list_of_elements)
 
 
-# función que permite obtener una sublista de las n-ésimas entradas de las listas
-# que conforman otra lista
-def sublista(lista, n):
-    sublista = []
-    for i in range(len(lista)):
-        sublista.append(lista[i][n])
-    return sublista
+# print(is_IDs_sorted(lifestore_sales))
+# print(is_IDs_sorted(lifestore_products))
+# print(is_IDs_sorted(lifestore_searches))
 
-# función que verifica inconsistencias
-def verifica_inconsistencias():
-    mensaje_de_error = '''
-        Existen  inconsistencias en los datos proporcionados.
-        Datos enviados para revisión.
-        '''
-
-    # verifica si existen identificadores o nombres de productos repetidos
-    if len(set(sublista(lifestore_products, 0))) != len(lifestore_products) or \
-            len(set(sublista(lifestore_products, 1))) != len(lifestore_products):
-        sys.exit(mensaje_de_error)
-
-    # verifica si existen identificadores de ventas repetidos
-    if len(set(sublista(lifestore_sales, 0))) != len(lifestore_sales):
-        sys.exit(mensaje_de_error)
-
-    # verifica si existen identificadores de búsquedas repetidos
-    if len(set(sublista(lifestore_searches, 0))) != len(lifestore_searches):
-        sys.exit(mensaje_de_error)
-
-    # verifica si las reseñas de los productos se encuentran en el rango válido de 1 a 5
-    for score in set(sublista(lifestore_sales, 2)):
-        if score in {1, 2, 3, 4, 5}:
-            continue
-        else:
-            sys.exit(mensaje_de_error)
-
-    # verifica si los valores que toma la variable refund sólo se encuentra en el rango de 0 a 1
-    for refund in set(sublista(lifestore_sales, 4)):
-        if refund in {0, 1}:
-            continue
-        else:
-            sys.exit(mensaje_de_error)
-
-    productos_id = sublista(lifestore_products, 0)
-
-    # verifica si las id_product de las ventas corresponden a un producto existente
-    for sale in lifestore_sales:
-        if sale[1] in productos_id:
-            continue
-        else:
-            sys.exit(mensaje_de_error)
-
-    # verifica si las id_product de las búsquedas corresponden a un producto existente
-    for search in lifestore_searches:
-        if search[1] in productos_id:
-            continue
-        else:
-            sys.exit(mensaje_de_error)
-
-
-# función que verifica el orden de los identificadores.
-def identificadores_ordenados(lista):
-    identificadores = sublista(lista, 0)
-    return identificadores == sorted(identificadores), len(identificadores)
-
-
-# print(identificadores_ordenados(lifestore_sales))
-# print(identificadores_ordenados(lifestore_products))
-# print(identificadores_ordenados(lifestore_searches))
-
-# separador de secciones del sistema de análisis
+# separator de secciones del sistema de análisis
 separated = ['⥼', '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯', '⥽']
 separator = separated[0] + separated[1] + separated[2]
 
@@ -103,17 +44,11 @@ while True:
     print('\tEliga una opción:')
     print(options_list)
     a = f'{" " * (len(separated[1]) - 3)}'
-    enter_data = input(a + '・➣ ')
-    try:
-        selection = int(enter_data)
-        if selection < 1 or selection > 2:
-            print("El número no corresponde a ningúna opción indicada.")
-            print("Las opciones son \'1\' y \'2\'.")
-            print("Reintente, por favor.\n")
-        else:
-            break
-    except Exception as error:
-        print("Error: {}".format(error))
+    selection = input(a + '・➣ ')
+    if selection == '1' or selection == '2':
+        break
+    else:
+        print(f"Error: {selection} no es una opción válida")
         print("Las opciones son \'1\' y \'2\'.")
         print("Reintente, por favor.\n")
 
@@ -127,12 +62,6 @@ print(separator)
     Código del sistema de análisis que fue preparado elaborar el ánalisis de los datos.
 '''
 
-# sistema de análisis
-
-num_products = len(lifestore_products)      # obtiene el número de productos
-num_sales = len(lifestore_sales)            # obtiene el número de ventas
-num_searches = len(lifestore_searches)      # obtiene el número de búsquedas
-
 # mensaje de introducción
 introduction = """\nSISTEMA DE ANÁLISIS:
     Sistema diseñado para mostrar reportes mensuales y\o 
@@ -140,7 +69,6 @@ introduction = """\nSISTEMA DE ANÁLISIS:
     más buscados, menos buscados, mejor reseñados, peor reseñados, 
     los ingresos y la cantidad de ventas.
     """
-
 
 print(introduction)
 print(separator)
@@ -151,13 +79,32 @@ accounts = [['omar100', 'LOL'], ['emtech', '1234']]             # lista con las 
 print("INGRESO AL SISTEMA")
 
 # bucle para validar las credenciales
+
+intentos = 3
+
 while True:
-    user = input("\tIngrese su usuario: ")
-    password = input("\tIngrese su contraseña: ")
-    if [user, password] not in accounts:
-        print("\n\tEl usuario o la contraseña no son válidos, por favor, reintente.\n")
+    if intentos > 0:
+        user = input("\tIngrese su usuario: ")
+        password = input("\tIngrese su contraseña: ")
+        if user in sublista(accounts, 0):
+            if [user, password] in accounts:
+                print("\n\tIngreso al sistema exitoso!\n")
+                break
+            else:
+                intentos -= 1
+                print("\nLa contraseña es incorrecta.")
+                if intentos > 0:
+                    print("Por favor, reintente, tiene {} intentos restantes\n".format(intentos))
+        else:
+            intentos -= 1
+            print("\nEl usuario es incorrecto.")
+            if intentos > 0:
+                print("Por favor, reintente, tiene {} intentos restantes\n".format(intentos))
     else:
-        break
+        time.sleep(0.1)
+        exit("\n\tLas credenciales no son correctas, ya no tiene más intentos, lo sentimos.\n"
+             "\tVuelva más tarde.")
+
 print(separator)
 
 
@@ -224,48 +171,31 @@ for month in months:
     options_list += f'{vignette}{index}{vignette} ' + month + '\n'
     index += 1
 
-flag = 0
-year = 0
-month = 0
 while True:
-    if flag == 0:
-        print("\tAños disponibles: 2020")
-        a = f'{" " * (len(separated[1]) - 20)}'
-        enter_data = input(a + "Ingrese el año: ")
-        try:
-            year = int(enter_data)
-            if year == 2020:
-                flag += 1
-            else:
-                print("El año seleccionado no se encuentra en el registro.")
-                print("Los años disponibles son: 2020")
-                print("Reintente, por favor.\n")
-        except Exception as error:
-            print("Error: {}".format(error))
-            print("Los años disponibles son: 2020")
+    print("\tVer:")
+    print(options_list)
+    a = f'{" " * (len(separated[1]) - 3)}'
+    enter_data = input(a + "・➣ ")
+    try:
+        month = int(enter_data)
+        if month < 1 or month > 12:
+            print("El número ingresado no corresponde a ningún mes.")
+            print("Las opciones son: 1 - 12.")
             print("Reintente, por favor.\n")
-    if flag == 1:
-        print("\tVer:")
-        print(options_list)
-        a = f'{" " * (len(separated[1]) - 3)}'
-        enter_data = input(a + "・➣ ")
-        try:
-            month = int(enter_data)
-            if month < 1 or month > 12:
-                print("El número ingresado no corresponde a ningún mes.")
-                print("Las opciones son: 1-12.")
-                print("Reintente, por favor.\n")
-            else:
-                break
-        except Exception as error:
-            print("Error: {}".format(error))
-            print("Las opciones son: 1-12.")
-            print("Reintente, por favor.\n")
+        else:
+            break
+    except ValueError:
+        print("Error: {}".format(ValueError))
+        print("Las opciones son: 1-12.")
+        print("Reintente, por favor.\n")
 
-print(year)
 print(month)
 
 print(separator)
+
+num_products = len(lifestore_products)      # obtiene el número de productos
+num_sales = len(lifestore_sales)            # obtiene el número de ventas
+num_searches = len(lifestore_searches)      # obtiene el número de búsquedas
 
 
 def top_n_most(dictionary, n):
