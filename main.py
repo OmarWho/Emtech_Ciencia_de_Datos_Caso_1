@@ -1,6 +1,6 @@
 # import lists from lifestore_file.py
 from lifestore_file import lifestore_products, lifestore_sales, lifestore_searches
-import data_preprocessing as dp
+from data_preprocessing import sublista
 import data_classification as dc
 
 months = [  # opciones para escoger el mes
@@ -104,7 +104,7 @@ while True:
     if tries > 0:
         user = input("\tIngrese su usuario: ")
         password = input("\tIngrese su contraseña: ")
-        if user in dp.sublista(accounts, 0):
+        if user in sublista(accounts, 0):
             if [user, password] in accounts:
                 print("\n\tIngreso al sistema exitoso!\n")
                 break
