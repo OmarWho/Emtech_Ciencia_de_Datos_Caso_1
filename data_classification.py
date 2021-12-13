@@ -180,13 +180,13 @@ def menu_options(options):
     return options_list
 
 
-def print_table(table):
+def print_table(table, col, row):
     """Function to print a table
     :param table: list of lists
     :return: None
     """
-    col = len(table)
-    row = len(table[0])
+    # col = len(table)
+    # row = len(table[0])
     table_traspose = [[] for i in range(row)]
     for j in range(col):
         for i in range(row):
@@ -263,7 +263,7 @@ def obtain_monthly_data(sales, products, month_format, categories):
             column.extend(top_5_most_sold_by_category)
             table.append(column)
     if len(table) > 0:
-        print_table(table)
+        print_table(table, len(table), 6)
         num_products = len(products)
         num_sales_no_refund_by_product = num_elements_by_product(ids_sales_no_refund_products,
                                                                  num_products)
@@ -289,7 +289,7 @@ def obtain_monthly_data(sales, products, month_format, categories):
             column.extend(top_5_least_sold_by_category)
             table.append(column)
         if len(table) > 0:
-            print_table(table)
+            print_table(table, len(table), 6)
 
         reviews_by_product = []
         for ids_sale_product in ids_sales_products:
@@ -416,7 +416,7 @@ def obtain_2020_data(sales, searches, products, categories, monthly):
             table.append(column)
 
     if len(table) > 0:
-        print_table(table)
+        print_table(table, len(table), 11)
         num_searches_by_product = num_elements_by_product(ids_searches_products, num_products)
         top_10_most_searched = top_n(sort_list(num_searches_by_product, True, 1), 10)
         print("\n\tTop 10: Productos más buscados del año \n([id_product, num_searches]).")
@@ -441,7 +441,7 @@ def obtain_2020_data(sales, searches, products, categories, monthly):
         column.extend(top_10_least_searched_by_category)
         table.append(column)
     if len(table) > 0:
-        print_table(table)
+        print_table(table, len(table), 11)
         num_searches_by_product = num_elements_by_product(ids_searches_products, num_products)
         top_10_least_searched = top_n(sort_list(num_searches_by_product, False, 1), 10)
         print("\n\tTop 10: Productos menos buscados del año \n([id_product, num_searches]).")
