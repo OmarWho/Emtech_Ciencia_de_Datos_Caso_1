@@ -151,12 +151,12 @@ if selection == '1':
     month_name = months[int(month) - 1]
     month_format = dc.month_format(int(month))
 
-    print(month_format, month_name)
+    # print(month_format, month_name)
 
     print(f"\n\tReporte mensual: {month_name}/2020\n")
     dc.obtain_monthly_report(lifestore_sales, lifestore_searches, lifestore_products,
                              month_format, False)
 
 else:
-    print("\n\tReporte anual:\n")
+    print("\n\tReporte anual: 2020\n")
     dc.obtain_yearly_report(lifestore_sales, lifestore_searches, lifestore_products)

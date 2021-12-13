@@ -1,4 +1,4 @@
-from lifestore_file import lifestore_products, lifestore_sales, lifestore_searches
+# from lifestore_file import lifestore_products, lifestore_sales, lifestore_searches
 import data_preprocessing as dp
 
 ''' CLASSIFICATION:
@@ -134,17 +134,6 @@ def num_elements_by_product_from_category(list_ids_element_product, products, ca
                 num_elements_by_product_return[index][1] += 1
                 break
     return num_elements_by_product_return
-
-
-"""ventas_validas = sales_without_refund(lifestore_sales)
-sales_2020 = ids_sales_products_from_2020(ventas_validas)
-print(sales_2020)
-for month_num in range(12):
-    sales_month = ids_sales_products_from_month(ventas_validas, month_format(month_num + 1))
-    print(len(sales_month), sales_month)
-    print(num_elements_by_product(sales_month, len(lifestore_products)))
-
-print(num_elements_by_product(lifestore_searches, len(lifestore_products)))"""
 
 
 def sort_list(unsorted_list, order, index):
@@ -475,10 +464,10 @@ def obtain_monthly_report(sales, searches, products, month_format, yearly):
     categories = []
 
     for i in range(num_products):
-        if lifestore_products[i][3] in categories:
+        if products[i][3] in categories:
             continue
         else:
-            categories.append(lifestore_products[i][3])
+            categories.append(products[i][3])
 
     obtain_monthly_data(sales, products, month_format, categories)
     if not yearly:
@@ -496,10 +485,10 @@ def obtain_yearly_report(sales, searches, products):
     categories = []
 
     for i in range(num_products):
-        if lifestore_products[i][3] in categories:
+        if products[i][3] in categories:
             continue
         else:
-            categories.append(lifestore_products[i][3])
+            categories.append(products[i][3])
 
     for month_number in range(12):
         print(f"\n\tMes: {months[month_number]}\n")
@@ -508,5 +497,5 @@ def obtain_yearly_report(sales, searches, products):
     obtain_2020_data(sales, searches, products, categories, False)
 
 
-obtain_monthly_report(lifestore_sales, lifestore_searches, lifestore_products, '/01/', False)
-obtain_yearly_report(lifestore_sales, lifestore_searches, lifestore_products)
+# obtain_monthly_report(lifestore_sales, lifestore_searches, lifestore_products, '/01/', False)
+# obtain_yearly_report(lifestore_sales, lifestore_searches, lifestore_products)
